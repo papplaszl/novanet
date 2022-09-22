@@ -3,7 +3,7 @@ const db = require("../models");
 const User = db.users;
 const Op = db.Sequelize.Op;
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs"); 
+const bcrypt = require("bcryptjs");
 const { BOOLEAN, INTEGER } = require("sequelize");
 
 const { SECRET = "secret" } = process.env;
@@ -22,11 +22,11 @@ const generatePassword = (
     .map((x) => wishlist[x % wishlist.length])
     .join('')
 
-    
+
     console.log(Object.keys(req.body)[0]);
     var objKeys = Object.keys(req.body)[0];
     console.log(req.body);
-    
+
     if((objKeys.charAt(objKeys.length - 1)) != "}"){
       objKeys = objKeys + '"}';
     }
@@ -87,7 +87,7 @@ exports.findAll = (req, res) => {
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
 
-  
+
   const id = req.query.id;
     User.findOne( {where: {id} })
       .then(data => {
@@ -107,7 +107,7 @@ exports.findOne = (req, res) => {
 };
 
 exports.findOneInApiToken = (req, res) => {
- 
+
   var bodyJson = JSON.parse(Object.keys(req.body)[0]);
   const api_token = bodyJson.api_token;
   console.log(api_token);
@@ -217,7 +217,7 @@ exports.login = async  (req, res) => {
         // sign token and send it in response
         const api_token = await jwt.sign({ username: user.username }, SECRET);
         User.update({api_token}, {where: { id: user.id }});
-        res.json({ api_token, "USERID" : user.id, "QRCODE" : user.workQrCode});
+        res.json({ api_token, "USERID" : user.id, "QRCODE" : user.workQrCode, "userRole": user.role});
       } else {
         res.status(400).json({ error: "password doesn't match" });
       }
